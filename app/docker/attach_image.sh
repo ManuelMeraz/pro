@@ -8,12 +8,12 @@ set -o errexit
 
 # read the default options
 this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-project_dir="${this_dir}/.."
+root_lib_dir="${this_dir}/.."
 
-source "${project_dir}/common/log.sh"
+source "${root_lib_dir}/common/log.sh"
 
-project_name="$("${project_dir}/pycommon/current_project.py" 'set' 'name')"
+project_name="$("${root_lib_dir}/pycommon/current_project.py" 'set' 'name')"
 image_name="${project_name}-docker"
 
-project_path="$("${project_dir}/pycommon/current_project.py" 'set' 'path')"
-docker exec -it "${image_name}" bash -c "cd ${project_path}; bash"
+project_path="$("${root_lib_dir}/pycommon/current_project.py" 'set' 'path')"
+docker exec -it "${image_name}" bash -c "cd ${project_path}; echo Attached to ${image_name}!;bash"

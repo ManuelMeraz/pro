@@ -1,30 +1,29 @@
 #! /bin/bash
 
-project_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+root_lib_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-source "${project_dir}/common/log.sh" || return 1
-source "${project_dir}/common/clean_up.sh" || return 1
-source "${project_dir}/common/error_exit.sh" || return 1
+source "${root_lib_dir}/common/log.sh" || return 1
+source "${root_lib_dir}/common/clean_up.sh" || return 1
+source "${root_lib_dir}/common/error_exit.sh" || return 1
 
-source "${project_dir}/subcommands/set.sh" || __pro_error_exit "$LINENO" 
-source "${project_dir}/subcommands/attach.sh" || __pro_error_exit "$LINENO" 
-source "${project_dir}/subcommands/cd.sh" || __pro_error_exit "$LINENO" 
-source "${project_dir}/subcommands/start.sh" || __pro_error_exit "$LINENO" 
-source "${project_dir}/subcommands/stop.sh" || __pro_error_exit "$LINENO" 
+source "${root_lib_dir}/subcommands/set.sh" || __pro_error_exit "set subcommand" || return 1
+source "${root_lib_dir}/subcommands/cd.sh" || __pro_error_exit "cd subcommand" || return 1
 
-__pro_usage () {
+subcommand_container_dir="${root_lib_dir}/subcommands/container"
+source "${root_lib_dir}/subcommands/container/container.sh" || __pro_error_exit "container subcommand" || return 1
+
+__pro_usage() {
     echo "unknown command: $*"
-    echo "usage: script set|attach|cd|start|stop ARGUMENTS"
+    echo "usage: script set|cd|[con|container] ARGUMENTS"
 }
 
-__pro_set () {
+__pro_set() {
     shift
-    __pro_subcommand_set "$@"
-}
-
-__pro_attach () {
-    shift
-    __pro_subcommand_attach "$@"
+    if [[ -z "$1" ]]; then
+        __pro_log_info "[set] pro set takes the name of a new project"
+    else
+        __pro_subcommand_set "$@"
+    fi
 }
 
 __pro_cd() {
@@ -32,14 +31,9 @@ __pro_cd() {
     __pro_subcommand_cd "$@"
 }
 
-__pro_start () {
+__pro_container() {
     shift
-    __pro_subcommand_start "$@"
-}
-
-__pro_stop () {
-    shift
-    __pro_subcommand_stop "$@"
+    __pro_subcommand_container "$@"
 }
 
 
@@ -47,19 +41,19 @@ __pro_stop () {
 declare -A __PRO_SUBCOMMANDS=(
     [main]=__pro_usage
     [set]=__pro_set
-    [attach]=__pro_attach
-    [start]=__pro_start
-    [stop]=__pro_stop
     [cd]=__pro_cd
+    [con]=__pro_container
+    [container]=__pro_container
 )
 
 pro() {
     if [[ -d $HOME/.pro ]]; then
+
         # Magic line that makes it all working
         "${__PRO_SUBCOMMANDS[${1:-main}]:-${__PRO_SUBCOMMANDS[main]}}" "$@" 
     else
         __pro_log_info "First time running pro."
-        "${project_dir}"/pycommon/configure_defaults.py
+        "${root_lib_dir}"/pycommon/configure_defaults.py
     fi
 
 }

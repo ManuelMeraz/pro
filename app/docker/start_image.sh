@@ -9,11 +9,11 @@ set -o errexit
 
 # read the default options
 this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-project_dir="${this_dir}/.."
+root_lib_dir="${this_dir}/.."
 
-source "${project_dir}/common/log.sh"
+source "${root_lib_dir}/common/log.sh"
 
-project_name="$("${project_dir}/pycommon/current_project.py" 'set' 'name')"
+project_name="$("${root_lib_dir}/pycommon/current_project.py" 'set' 'name')"
 image_name="${project_name}-docker"
 
 __pro_log_info "Cleaning up existing ${image_name} containers..."

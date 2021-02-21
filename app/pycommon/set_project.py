@@ -52,7 +52,6 @@ if __name__ == "__main__":
 
     project_section = make_project_section(config, project_name)
     if not os.path.exists(project_section["path"]):
-        logging.error("Project path does not exist.")
         exit(1)
 
     project_section["name"] = project_name
