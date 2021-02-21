@@ -1,3 +1,5 @@
 #! /bin/bash
 
-source app/pro.sh
+this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+source "${this_dir}/app/pro.sh"
