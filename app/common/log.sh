@@ -1,14 +1,14 @@
 #! /bin/bash
 
-function __error() {
+___pro_log_error() {
     echo -e "[ERROR]: $*"
 }
 
-function __debug() {
+__pro_log_debug() {
     echo -e "[DEBUG]: $*"
 }
 
-function __info() {
+__pro_log_info() {
     echo -e "[INFO]: $*"
 }
 
