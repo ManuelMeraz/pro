@@ -1,4 +1,6 @@
-___pro_log_error() {
+#! /bin/bash 
+
+__pro_log_error() {
     echo -e "[ERROR]: $*"
 }
 

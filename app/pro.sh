@@ -54,10 +54,13 @@ declare -A __PRO_SUBCOMMANDS=(
 )
 
 pro() {
-    [[ ! -d $HOME/.pro ]] && "${project_dir}"/util/configure_user.py
+    if [[ -d $HOME/.pro ]]; then
+        # Magic line that makes it all working
+        "${__PRO_SUBCOMMANDS[${1:-main}]:-${__PRO_SUBCOMMANDS[main]}}" "$@" 
+    else
+        __pro_log_info "First time running pro. Configuring defaults..."
+        "${project_dir}"/util/configure_defaults.py
+        __pro_log_info "$HOME/.pro/config created!"
+    fi
 
-    # Magic line that makes it all working
-    "${__PRO_SUBCOMMANDS[${1:-main}]:-${__PRO_SUBCOMMANDS[main]}}" "$@" 
-
-    __pro_clean_up
 }
