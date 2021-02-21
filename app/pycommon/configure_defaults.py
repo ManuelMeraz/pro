@@ -9,7 +9,7 @@ import configparser
 
 def prompt_user_workspace(home):
     default_workspace = os.path.join(home, "projects")
-    workspace_path = input(f"[INFO]: workspace path [{default_workspace}]?") or default_workspace
+    workspace_path = input(f"[INFO][configure]: workspace path [{default_workspace}]?") or default_workspace
 
     if not os.path.exists(workspace_path):
         os.mkdir(workspace_path)

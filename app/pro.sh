@@ -58,9 +58,8 @@ pro() {
         # Magic line that makes it all working
         "${__PRO_SUBCOMMANDS[${1:-main}]:-${__PRO_SUBCOMMANDS[main]}}" "$@" 
     else
-        __pro_log_info "First time running pro. Configuring defaults..."
+        __pro_log_info "First time running pro."
         "${project_dir}"/pycommon/configure_defaults.py
-        __pro_log_info "$HOME/.pro/config created!"
     fi
 
 }

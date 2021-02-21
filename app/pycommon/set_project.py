@@ -55,6 +55,8 @@ if __name__ == "__main__":
         logging.error("Project path does not exist.")
         exit(1)
 
+    project_section["name"] = project_name
+
     config[project_name] = prompt_user_for_project_details(project_section)
     config["current_project"] = config[project_name]
 
