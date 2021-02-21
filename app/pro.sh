@@ -3,7 +3,6 @@
 this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 source "${this_dir}/common/log.sh"
-
 source "${this_dir}/subcommands/set.sh"
 source "${this_dir}/subcommands/attach.sh"
 source "${this_dir}/subcommands/cd.sh"
@@ -12,31 +11,41 @@ source "${this_dir}/subcommands/stop.sh"
 
 __pro_usage () {
     echo "unknown command: $*"
-    echo "usage: script set|attach|cd|start|stop ARGUMENTS" }
+    echo "usage: script set|attach|cd|start|stop ARGUMENTS"
 }
 
 __pro_set () {
     shift
+    "${this_dir}"/util/configure_user.py
+
     __pro_subcommand_set "$@"
 }
 
 __pro_attach () {
     shift
+    "${this_dir}"/util/configure_user.py
+
     __pro_subcommand_attach "$@"
 }
 
 __pro_cd() {
     shift
+    "${this_dir}"/util/configure_user.py
+
     __pro_subcommand_cd "$@"
 }
 
 __pro_start () {
     shift
+    "${this_dir}"/util/configure_user.py
+
     __pro_subcommand_start "$@"
 }
 
 __pro_stop () {
     shift
+    "${this_dir}"/util/configure_user.py
+
     __pro_subcommand_stop "$@"
 }
 
