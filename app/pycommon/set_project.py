@@ -37,7 +37,6 @@ if __name__ == "__main__":
     logger = Logger(level=logging.INFO, subcommand="set")
 
     if len(sys.argv) <= 1:
-        logging.error("Missing project name")
         exit(1)
 
     home = os.environ["HOME"]

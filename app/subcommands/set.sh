@@ -20,7 +20,7 @@ __pro_subcommand_set() {
     fi
 
     workspace_dir="$(cat $HOME/.pro/config | grep -i workspace | awk -F '= ' '{print $2}')"
-    "${root_lib_dir}/pycommon/set_project.py" "$@" || __pro_error_exit "The directory does not exist: ${workspace_dir}/${project_name}" || return 1
+    "${root_lib_dir}/pycommon/set_project.py" "$@" || return 1
 
     __pro_log_info "Building docker image..."
     "${root_lib_dir}/docker/build_image.sh" || __pro_error_exit "Attempted build image." || return 1

@@ -13,17 +13,37 @@ subcommand_container_dir="${root_lib_dir}/subcommands/container"
 source "${root_lib_dir}/subcommands/container/container.sh" || __pro_error_exit "container subcommand" || return 1
 
 __pro_usage() {
-    echo "unknown command: $*"
-    echo "usage: script set|cd|[con|container] ARGUMENTS"
+	echo "pro: ${version}"
+	echo 
+	echo "A project management command line tool for debian based operating systems."
+	echo
+	echo "usage:"
+	echo "  pro set <project_name>"
+	echo "  pro cd"
+	echo "  pro [con|container] attach|run|start|stop"
 }
 
 __pro_set() {
     shift
     if [[ -z "$1" ]]; then
-        __pro_log_info "[set] pro set takes the name of a new project"
-    else
-        __pro_subcommand_set "$@"
+        echo "pro set:"
+        echo 
+        echo "This subcommand will set the current project to a directory matching <project_name> within the workspace."
+        echo
+        echo "usage:"
+        echo "  pro set existing_directory_in_workspase"
+        echo ""
+
+        workspace="$HOME"
+        if [[ -d $HOME/.pro ]]; then
+            workspace="$(cat $HOME/.pro/config | grep -i workspace | awk -F '= ' '{print $2}')"
+        fi
+
+        echo "current workspace: ${workspace}"
+        return 1
     fi
+
+    __pro_subcommand_set "$@"
 }
 
 __pro_cd() {
