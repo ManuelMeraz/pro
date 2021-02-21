@@ -1,0 +1,24 @@
+#! /bin/bash
+
+set -o nounset 
+set -o pipefail
+
+source common/logging.sh
+source common/error_handling.sh
+
+# Always called at the end to clean up
+function handle_exit() {
+	__info "clean up"
+}
+
+setup() {
+    __info "setting up"
+}
+
+main() {
+    a=0
+    ((a++)) || error_exit "$LINENO" "let operation returned non 0 code"
+}
+
+setup
+main
