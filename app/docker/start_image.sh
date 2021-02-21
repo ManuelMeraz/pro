@@ -1,28 +1,36 @@
 #!/usr/bin/env bash
 
+set -o nounset
+set -o errexit
+
 # This script will start the docker image and create a docker container
 # process that may be attached to. After this script use the bash.sh script
 # to attach to the container.
 
 # read the default options
 this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-source "${this_dir}/ms-docker-options"
+project_dir="${this_dir}/.."
 
-echo "Cleaning up existing ${DOCKER_NAME} containers..."
-docker stop ${DOCKER_NAME} || true
-docker rm   ${DOCKER_NAME} || true
+source ${project_dir}/common/log.sh
 
-echo "Running ${DOCKER_NAME}..."
+repo="$(${project_dir}/pycommon/current_project.py 'set' 'image')"
+project_name="$(${project_dir}/pycommon/current_project.py 'set' 'name')"
+image_name="${project_name}-docker"
+
+__pro_log_info "Cleaning up existing ${image_name} containers..."
+docker stop ${image_name} &> /dev/null || true
+docker rm   ${image_name} &> /dev/null || true
+
+__pro_log_info "Running ${image_name}..."
 docker run --privileged -d \
     -e "DISPLAY=unix$DISPLAY" -v "/tmp/.X11-unix:/tmp/.X11-unix:rw"  -v "/tmp:/tmp:rw" -v "/dev:/dev:rw" \
-    ${DOCKER_GPU_FLAGS} \
-    -h ${DOCKER_NAME} \
+    -h ${image_name} \
     -v "$HOME:$HOME:rw" \
-    ${DOCKER_RUN_EXTRA} \
-    -d -p 80:80 -p 3000:3000 -p 8080:8080 -p 8081:8081 --ipc=host --network host \
-    --env MATSINKING_ROOT=$MATSINKING_ROOT \
-    --env DOCKER_NAME=${DOCKER_NAME} \
-    --name ${DOCKER_NAME} ${DOCKER_NAME}:${TAG}
+    -v "/opt:/opt:rw" \
+    -d -it \
+    --ipc=host --network=host \
+    --name ${image_name} ${repo}
 
-docker exec -u root ${DOCKER_NAME} sh -c "echo 127.0.0.1 ${DOCKER_NAME} >> /etc/hosts"
-${this_dir}/attach_image.sh
+docker exec ${image_name} sh -c "echo 127.0.0.1 ${image_name} >> /etc/hosts"
+
+#${this_dir}/attach_image.sh
