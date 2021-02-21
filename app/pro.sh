@@ -1,13 +1,16 @@
 #! /bin/bash
 
-this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+project_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-source "${this_dir}/common/log.sh"
-source "${this_dir}/subcommands/set.sh"
-source "${this_dir}/subcommands/attach.sh"
-source "${this_dir}/subcommands/cd.sh"
-source "${this_dir}/subcommands/start.sh"
-source "${this_dir}/subcommands/stop.sh"
+source "${project_dir}/common/log.sh" || return 1
+source "${project_dir}/common/clean_up.sh" || return 1
+source "${project_dir}/common/error_exit.sh" || return 1
+
+source "${project_dir}/subcommands/set.sh" || __pro_error_exit "$LINENO" 
+source "${project_dir}/subcommands/attach.sh" || __pro_error_exit "$LINENO" 
+source "${project_dir}/subcommands/cd.sh" || __pro_error_exit "$LINENO" 
+source "${project_dir}/subcommands/start.sh" || __pro_error_exit "$LINENO" 
+source "${project_dir}/subcommands/stop.sh" || __pro_error_exit "$LINENO" 
 
 __pro_usage () {
     echo "unknown command: $*"
@@ -16,36 +19,26 @@ __pro_usage () {
 
 __pro_set () {
     shift
-    "${this_dir}"/util/configure_user.py
-
     __pro_subcommand_set "$@"
 }
 
 __pro_attach () {
     shift
-    "${this_dir}"/util/configure_user.py
-
     __pro_subcommand_attach "$@"
 }
 
 __pro_cd() {
     shift
-    "${this_dir}"/util/configure_user.py
-
     __pro_subcommand_cd "$@"
 }
 
 __pro_start () {
     shift
-    "${this_dir}"/util/configure_user.py
-
     __pro_subcommand_start "$@"
 }
 
 __pro_stop () {
     shift
-    "${this_dir}"/util/configure_user.py
-
     __pro_subcommand_stop "$@"
 }
 
@@ -61,6 +54,10 @@ declare -A __PRO_SUBCOMMANDS=(
 )
 
 pro() {
+    [[ ! -d $HOME/.pro ]] && "${project_dir}"/util/configure_user.py
+
     # Magic line that makes it all working
-    "${__PRO_SUBCOMMANDS[${1:-main}]:-${__PRO_SUBCOMMANDS[main]}}" "$@"
+    "${__PRO_SUBCOMMANDS[${1:-main}]:-${__PRO_SUBCOMMANDS[main]}}" "$@" 
+
+    __pro_clean_up
 }

@@ -2,11 +2,12 @@
 
 import os
 import configparser
+import logging
 
 
 def prompt_user_workspace(home):
     default_workspace = os.path.join(home, "projects")
-    workspace_path = input(f"workspace path [{default_workspace}]?") or default_workspace
+    workspace_path = input(f"[INFO]: workspace path [{default_workspace}]?") or default_workspace
 
     if not os.path.exists(workspace_path):
         os.mkdir(workspace_path)
@@ -16,7 +17,7 @@ def prompt_user_workspace(home):
 
 def prompt_user_name():
     default_username = os.environ["USER"];
-    return input(f"docker image username [{default_username}]?") or default_username
+    return input(f"[INFO]: docker image username [{default_username}]?") or default_username
 
 
 if __name__ == "__main__":

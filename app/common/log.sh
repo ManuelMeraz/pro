@@ -1,5 +1,3 @@
-#! /bin/bash
-
 ___pro_log_error() {
     echo -e "[ERROR]: $*"
 }
