@@ -7,8 +7,14 @@ source "${subcommand_container_dir}/subcommands/stop.sh" || return 1
 
 
 __pro_subcommand_container_usage () {
-    echo "unknown command: $*"
-    echo "usage: pro container [at|attach]|run|[st|start]|[sp|stop] ARGUMENTS"
+	echo "pro container:"
+	echo 
+	echo "Project development container tool"
+	echo
+	echo "usage:"
+	echo "  attach: Atach to the project container if its running."
+	echo "  start: Start or restart the current project docker container."
+	echo "  stop: Stop the current project container if its running."
 }
 
 __pro_subcommand_container_attach () {
