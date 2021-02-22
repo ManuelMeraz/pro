@@ -33,3 +33,20 @@ pro attach
 
 attach to current project docker container 
 ```
+
+## Dependencies
+
+```
+sudo apt install -y docker.io silversearcher-ag fzf 
+sudo usermod -aG docker $USER # log in and out after this or reboot
+```
+
+## Installation
+
+Installation will install to `/opt/pro`
+
+```
+sudo scripts/install_pro.sh
+echo "[[ -d /opt/pro ]] && source /opt/pro/setup.sh" >> ~/.bashrc
+source ~/.bashrc
+```
