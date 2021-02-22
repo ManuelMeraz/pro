@@ -19,4 +19,4 @@ docker build \
     --build-arg DOCKER_GID="${docker_gid}" \
     --build-arg DOCKER_USERNAME="${docker_username}" \
     --build-arg REPO="${repo}" \
-    -t "${image_name}" "${this_dir}"  || exit 1
+    -t "${image_name}" "${this_dir}"  1> /dev/null || exit 1
