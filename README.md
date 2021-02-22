@@ -1,5 +1,5 @@
 # pro
-project development cli for debian based systems in bash
+command line development environment (CLDE) for debian based systems in bash
 
 ```
 pro set 
