@@ -6,6 +6,7 @@ if ! groups | grep docker &> /dev/null && ! hostname | grep docker &> /dev/null;
     echo "sudo usermod -aG docker $USER"
     echo 
     echo "Then log out and back in or restart your machine."
+    return 1
 fi
 
 this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"

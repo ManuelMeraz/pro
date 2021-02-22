@@ -29,5 +29,3 @@ docker run --privileged -d \
     -d -it \
     --ipc=host --network=host \
     --name "${image_name}" "${image_name}"
-
-"${this_dir}/attach_image.sh"
