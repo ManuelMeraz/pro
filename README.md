@@ -1,4 +1,4 @@
-# pro
+# pro (project)
 command line development environment (CLDE) for debian based systems in bash
 
 ```
