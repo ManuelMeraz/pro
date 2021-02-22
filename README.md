@@ -2,9 +2,9 @@
 project development cli for debian based systems in bash
 
 ```
-pro add 
+pro set 
 
-Add new project
+Set new project
     * check directory, if not exists ask for git repo url
     * ask for docker repo and tag
     * build custom image with username
