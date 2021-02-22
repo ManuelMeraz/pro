@@ -1,7 +1,6 @@
 #! /bin/bash
 
 source "${subcommand_container_dir}/subcommands/attach.sh" || return 1
-source "${subcommand_container_dir}/subcommands/run.sh" || return 1
 source "${subcommand_container_dir}/subcommands/start.sh" || return 1
 source "${subcommand_container_dir}/subcommands/stop.sh" || return 1
 
@@ -22,10 +21,6 @@ __pro_subcommand_container_attach () {
     __pro_subcommand_container_subcommand_attach "$@"
 }
 
-__pro_subcommand_container_run() {
-    shift
-    __pro_subcommand_container_subcommand_run "$@"
-}
 
 __pro_subcommand_container_start () {
     shift
@@ -49,8 +44,6 @@ declare -A __PRO_SUBCOMMAND_CONTAINER_SUBCOMMANDS=(
 
     [sp]=__pro_subcommand_container_stop
     [stop]=__pro_subcommand_container_stop
-
-    [run]=__pro_subcommand_container_run
 )
 
 __pro_subcommand_container() {
