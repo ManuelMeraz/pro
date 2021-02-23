@@ -26,25 +26,25 @@ Set new project
 ```
 
 ```
-pro start 
-
-Start the project container. Restart if already running.
-```
-
-```
-pro stop
-
-Stop the project container.
-```
-
-```
 pro cd
 
 cd to current project directory.
 ```
 
 ```
-pro attach 
+pro container start 
+
+Start the project container. Restart if already running.
+```
+
+```
+pro container stop
+
+Stop the project container.
+```
+
+```
+pro container attach 
 
 attach to current project docker container 
 ```
