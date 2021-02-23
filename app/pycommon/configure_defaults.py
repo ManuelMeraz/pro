@@ -34,10 +34,11 @@ if __name__ == "__main__":
     config_dir = os.path.join(home, ".pro")
     config_path = os.path.join(config_dir, "config")
 
-    if not os.path.exists(config_dir):
-        os.mkdir(config_dir)
-    elif not os.path.exists(config_path):
-        config = configparser.ConfigParser()
+    config = configparser.ConfigParser()
+    if not os.path.exists(config_path):
+
+        if not os.path.exists(config_dir):
+            os.mkdir(config_dir)
 
         config["default"] = {"workspace": prompt_user_workspace(home),
                              "username": prompt_docker_user_name(os.environ["USER"]),

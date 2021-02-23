@@ -7,24 +7,17 @@ __pro_subcommand_config() {
     do
     key="$1"
 
+
+    ################################## options #######################################
+    force=false
+    ##################################################################################
+
     case $key in
-        -f|--force)
-        shift # past argument
-        shift # past value
-
-        ##################################################################################
-        __pro_log_info "configuring pro..."
-        "${root_lib_dir}"/pycommon/configure_defaults.py
-
-        return 0
-        ##################################################################################
-
-        ;;
         -h|--help)
         shift # past argument
         shift # past value
 
-        ##################################################################################
+        ##################################### help ########################################
         echo "pro config:"
         echo 
         echo "This subcommand will configure the global configuration for pro. The project"
@@ -44,6 +37,15 @@ __pro_subcommand_config() {
         ##################################################################################
 
         ;;
+        -f|--force)
+        shift # past argument
+        shift # past value
+
+        #################################### force #######################################
+        force=true
+        ##################################################################################
+
+        ;;
         *)    # unknown option
         POSITIONAL+=("$1") # save it in an array for later
         shift # past argument
@@ -52,9 +54,12 @@ __pro_subcommand_config() {
     done
     set -- "${POSITIONAL[@]}" # restore positional parameters
 
-    if [[ -d $HOME/.pro ]]; then
+    ########################### config subcommand ###############################
+    if [[ -d $HOME/.pro ]] && [[ ! ${force} ]]; then
         __pro_log_info "pro is already configured."
     else
         "${root_lib_dir}"/pycommon/configure_defaults.py
     fi
+    ############################################################################
+
 }
