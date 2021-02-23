@@ -7,8 +7,7 @@ import os
 import configparser
 
 
-def prompt_user_workspace(home):
-    default_workspace = home
+def prompt_user_workspace(default_workspace):
     workspace_path = input(f"[INFO][configure]: workspace path [{default_workspace}]?") or default_workspace
     workspace_path = os.path.expanduser(workspace_path)
 
@@ -18,13 +17,11 @@ def prompt_user_workspace(home):
     return workspace_path
 
 
-def prompt_docker_image():
-    default_docker_image = "ubuntu:latest";
+def prompt_docker_image(default_docker_image):
     return input(f"[INFO][configure]: docker image [{default_docker_image}]?") or default_docker_image
 
 
-def prompt_docker_user_name():
-    default_username = os.environ["USER"];
+def prompt_docker_user_name(default_username):
     return input(f"[INFO][configure]: docker image username [{default_username}]?") or default_username
 
 
@@ -39,12 +36,21 @@ if __name__ == "__main__":
 
     if not os.path.exists(config_dir):
         os.mkdir(config_dir)
+    elif not os.path.exists(config_path):
+        config = configparser.ConfigParser()
 
-    config = configparser.ConfigParser()
+        config["default"] = {"workspace": prompt_user_workspace(home),
+                             "username": prompt_docker_user_name(os.environ["USER"]),
+                             "image": prompt_docker_image("ubuntu:latest")}
+    else:
+        config = configparser.ConfigParser()
+        config.read(config_path)
 
-    config["default"] = {"workspace": prompt_user_workspace(home),
-                         "username": prompt_docker_user_name(),
-                         "image": prompt_docker_image()}
+        default_options = config["default"]
+        config["default"] = {"workspace": prompt_user_workspace(default_options["workspace"]),
+                             "username": prompt_docker_user_name(default_options["username"]),
+                             "image": prompt_docker_image(default_options["image"])}
+
 
     with open(config_path, 'w') as configfile:
         config.write(configfile)
