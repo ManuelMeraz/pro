@@ -44,6 +44,14 @@ __pro_subcommand_config() {
         ##################################################################################
 
         ;;
+        -n|--no-prompt)
+        shift # shift flag
+
+        #################################### force #######################################
+        flags="${flags} --no-prompt"
+        ##################################################################################
+
+        ;;
         *)    # unknown option
         POSITIONAL+=("$1") # save it in an array for later
         shift # past argument
@@ -58,10 +66,10 @@ __pro_subcommand_config() {
         __pro_log_info "pro is already configured."
     elif [[ -z ${POSITIONAL} ]]; then
         echo b
-        "${root_lib_dir}"/pycommon/configure_defaults.py 
+        "${root_lib_dir}"/pycommon/configure_defaults.py ${flags}
     else
         echo c
-        "${root_lib_dir}"/pycommon/configure_defaults.py --set "${POSITIONAL[@]}"
+        "${root_lib_dir}"/pycommon/configure_defaults.py ${flags} --update "${POSITIONAL[@]}"
     fi
     ############################################################################
 }
