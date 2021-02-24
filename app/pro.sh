@@ -13,6 +13,11 @@ source "${root_lib_dir}/subcommands/config.sh" || __pro_error_exit "failed sourc
 subcommand_container_dir="${root_lib_dir}/subcommands/container"
 source "${root_lib_dir}/subcommands/container/container.sh" || __pro_error_exit "container subcommand" || return 1
 
+__pro_is_configured() {
+    [[ ! -d $HOME/.pro ]] && __pro_log_error "pro is not configured. To configure please run 'pro config'." && echo && __pro_usage && return 1
+    return 0
+}
+
 __pro_config() {
     shift
     __pro_subcommand_config "$@"
@@ -31,11 +36,6 @@ __pro_usage() {
     echo
 	echo "options:"
 	echo "  -h|--help: show this help"
-}
-
-__pro_is_configured() {
-    [[ ! -d $HOME/.pro ]] && __pro_log_error "pro is not configured. To configure please run 'pro config'." && echo && __pro_usage && return 1
-    return 0
 }
 
 __pro_set() {

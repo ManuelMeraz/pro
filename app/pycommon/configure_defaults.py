@@ -5,52 +5,46 @@ from logging_utils import Logger
 
 import os
 import configparser
+import argparse
 
-
-def prompt_user_workspace(default_workspace):
-    workspace_path = input(f"[INFO][configure]: workspace path [{default_workspace}]?") or default_workspace
-    workspace_path = os.path.expanduser(workspace_path)
-
-    if not os.path.exists(workspace_path):
-        os.mkdir(workspace_path)
-
-    return workspace_path
-
-
-def prompt_docker_image(default_docker_image):
-    return input(f"[INFO][configure]: docker image [{default_docker_image}]?") or default_docker_image
-
-
-def prompt_docker_user_name(default_username):
-    return input(f"[INFO][configure]: docker image username [{default_username}]?") or default_username
+from default_settings import DEFAULT_SETTINGS, prompt_user, Setting
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--set",
+			    metavar="KEY=VALUE",
+			    nargs='+',
+			    help="Set a number of key-value pairs "
+				 "(do not put spaces before or after the = sign). "
+				 "If a value contains spaces, you should define "
+				 "it with double quotes: "
+				 'foo="this is a sentence". Note that '
+				 "values are always treated as strings.")
+    args = parser.parse_args()
+
     logger = Logger(level=logging.INFO, subcommand="configure")
     logging.info("Configuring defaults...")
 
     home = os.environ["HOME"]
-
     config_dir = os.path.join(home, ".pro")
     config_path = os.path.join(config_dir, "config")
-
     config = configparser.ConfigParser()
-    if not os.path.exists(config_path):
 
+    if not os.path.exists(config_path):
         if not os.path.exists(config_dir):
             os.mkdir(config_dir)
 
-        config["default"] = {"workspace": prompt_user_workspace(home),
-                             "username": prompt_docker_user_name(os.environ["USER"]),
-                             "image": prompt_docker_image("ubuntu:latest")}
-    else:
-        config = configparser.ConfigParser()
-        config.read(config_path)
+        config["settings"] = {name: prompt_user(setting) for name, setting in DEFAULT_SETTINGS.items()}
 
-        default_options = config["default"]
-        config["default"] = {"workspace": prompt_user_workspace(default_options["workspace"]),
-                             "username": prompt_docker_user_name(default_options["username"]),
-                             "image": prompt_docker_image(default_options["image"])}
+    else:
+        config.read(config_path)
+        settings = DEFAULT_SETTINGS
+
+        user_settings = config["settings"]
+        settings = {name: Setting(user_settings[name], setting.desc) for name, setting in settings.items()}
+
+        config["settings"] = {name: prompt_user(setting) for name, setting in settings.items()}
 
 
     with open(config_path, 'w') as configfile:

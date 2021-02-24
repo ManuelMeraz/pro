@@ -2,20 +2,19 @@
 
 __pro_subcommand_config() {
 
-    POSITIONAL=()
-    while [[ $# -gt 0 ]]
-    do
-    key="$1"
-
 
     ################################## options #######################################
     force=false
     ##################################################################################
 
+    POSITIONAL=()
+    while [[ $# -gt 0 ]]
+    do
+    key="$1"
+
     case $key in
         -h|--help)
-        shift # past argument
-        shift # past value
+        shift # shift flag
 
         ##################################### help ########################################
         echo "pro config:"
@@ -38,8 +37,7 @@ __pro_subcommand_config() {
 
         ;;
         -f|--force)
-        shift # past argument
-        shift # past value
+        shift # shift flag
 
         #################################### force #######################################
         force=true
@@ -55,11 +53,15 @@ __pro_subcommand_config() {
     set -- "${POSITIONAL[@]}" # restore positional parameters
 
     ########################### config subcommand ###############################
-    if [[ -d $HOME/.pro ]] && [[ ! ${force} ]]; then
+    if [[ -d $HOME/.pro ]] && [[ "${force}" = false ]]; then
+        echo a
         __pro_log_info "pro is already configured."
+    elif [[ -z ${POSITIONAL} ]]; then
+        echo b
+        "${root_lib_dir}"/pycommon/configure_defaults.py 
     else
-        "${root_lib_dir}"/pycommon/configure_defaults.py
+        echo c
+        "${root_lib_dir}"/pycommon/configure_defaults.py --set "${POSITIONAL[@]}"
     fi
     ############################################################################
-
 }
