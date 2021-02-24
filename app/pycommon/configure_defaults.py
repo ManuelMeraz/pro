@@ -19,19 +19,17 @@ def update_config_with_passed_in_options(config_in_making, passed_in_key_pairs, 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--set",
+    parser.add_argument("--update",
 			    metavar="KEY=VALUE",
 			    nargs='+',
-			    help="Set a number of key-value pairs "
-				 "(do not put spaces before or after the = sign). "
-				 "If a value contains spaces, you should define "
-				 "it with double quotes: "
-				 'foo="this is a sentence". Note that '
+			    help="Update ~/.pro/config directly without prompting by passing in key-value pairs."
+				 "(do not put spaces before or after the = sign). If a value contains spaces, "
+                                 'you should define it with double quotes: foo="this is a sentence". Note that '
 				 "values are always treated as strings.")
     args = parser.parse_args()
 
     logger = Logger(level=logging.INFO, subcommand="configure")
-    logging.info("Configuring defaults...")
+    logging.info("Configuring settings...")
 
     home = os.environ["HOME"]
     config_dir = os.path.join(home, ".pro")
@@ -39,8 +37,8 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
 
     passed_in_options = {}
-    if args.set is not None:
-        passed_in_options = dict(map(lambda k_v:k_v.split("="), args.set))
+    if args.update is not None:
+        passed_in_options = dict(map(lambda k_v:k_v.split("="), args.update))
 
     config_being_made = {}
 
