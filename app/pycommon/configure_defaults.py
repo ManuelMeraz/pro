@@ -15,17 +15,24 @@ def update_config_with_passed_in_options(config_in_making, passed_in_key_pairs, 
             current_settings.pop(k)
             config_in_making[k] = v
         except KeyError:
-            print(f"[WARNING]: {k} is not a valid option. Ignoring.")
+            print(f"[WARN]: {k} is not a valid option. Ignoring.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--update",
+    parser.add_argument("--options",
 			    metavar="KEY=VALUE",
 			    nargs='+',
-			    help="Update ~/.pro/config directly without prompting by passing in key-value pairs."
-				 "(do not put spaces before or after the = sign). If a value contains spaces, "
+			    help= "(do not put spaces before or after the = sign). If a value contains spaces, "
                                  'you should define it with double quotes: foo="this is a sentence". Note that '
 				 "values are always treated as strings.")
+
+    parser.add_argument(
+        "--no-prompt",
+        action="store_true",
+        default=False,
+        help="Update ~/.pro/config directly without prompting by passing in key-value pairs."
+    )
+
     args = parser.parse_args()
 
     logger = Logger(level=logging.INFO, subcommand="configure")
@@ -37,8 +44,8 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
 
     passed_in_options = {}
-    if args.update is not None:
-        passed_in_options = dict(map(lambda k_v:k_v.split("="), args.update))
+    if args.options is not None:
+        passed_in_options = dict(map(lambda k_v:k_v.split("="), args.options))
 
     config_being_made = {}
 
@@ -48,21 +55,28 @@ if __name__ == "__main__":
 
         user_settings = {}
         update_config_with_passed_in_options(user_settings, passed_in_options, DEFAULT_SETTINGS)
-        user_settings= {name: prompt_user(setting) for name, setting in DEFAULT_SETTINGS.items()}
-        config["settings"] = user_settings
+
+        if not args.no_prompt:
+            user_settings= {name: prompt_user(setting) for name, setting in DEFAULT_SETTINGS.items()}
+        else:
+            user_settings={name: setting.value for name, setting in DEFAULT_SETTINGS.items()}
 
     else:
         config.read(config_path)
         settings = DEFAULT_SETTINGS
 
         user_settings = config["settings"]
-        settings = {name: Setting(user_settings[name], setting.desc) for name, setting in settings.items()}
+
+        for name, setting in settings.items():
+            if name in user_settings:
+                settings[name].value = user_settings[name]
 
         update_config_with_passed_in_options(user_settings, passed_in_options, settings)
 
-        user_settings.update({name: prompt_user(setting) for name, setting in settings.items()})
-        config["settings"] = user_settings
+        if not args.no_prompt:
+            user_settings.update({name: prompt_user(setting) for name, setting in settings.items()})
 
+    config["settings"] = user_settings
 
     with open(config_path, 'w') as configfile:
         config.write(configfile)

@@ -10,7 +10,7 @@ class Setting:
 DEFAULT_SETTINGS = {
     "workspace" : Setting(os.environ["HOME"], desc="Workspace Path"),
     "username" : Setting(os.environ["USER"], desc="Docker container username"),
-    "image" : Setting("ubuntu:20.04", desc="Default docker image")
+    "image" : Setting("ubuntu:20.04", desc="Default docker image"),
 }
 
 def prompt_user(setting: Setting):
