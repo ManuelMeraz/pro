@@ -1,5 +1,20 @@
 # pro
-command line development environment (CLDE) for debian based systems in bash
+
+```
+pro: 0.0.2
+
+A command line development environment (CLDE) for bash and debian based systems.
+
+usage:
+  config: configure pro
+  set <project_name>: a directory name within the workspace
+  cd: cd to the project
+  [con|container] attach|run|start|stop
+
+options:
+  -h|--help: show this help
+
+```
 
 ```
 pro set 
@@ -11,25 +26,25 @@ Set new project
 ```
 
 ```
-pro start 
-
-Start the project container. Restart if already running.
-```
-
-```
-pro stop
-
-Stop the project container.
-```
-
-```
 pro cd
 
 cd to current project directory.
 ```
 
 ```
-pro attach 
+pro container start 
+
+Start the project container. Restart if already running.
+```
+
+```
+pro container stop
+
+Stop the project container.
+```
+
+```
+pro container attach 
 
 attach to current project docker container 
 ```
