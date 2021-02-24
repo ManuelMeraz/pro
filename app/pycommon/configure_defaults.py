@@ -9,13 +9,13 @@ import argparse
 
 from default_settings import DEFAULT_SETTINGS, prompt_user, Setting
 
-def update_config_with_passed_in_options(config_in_making, passed_in_key_pairs):
+def update_config_with_passed_in_options(config_in_making, passed_in_key_pairs, current_settings):
     for k, v in passed_in_key_pairs.items():
         try:
-            DEFAULT_SETTINGS.pop(k)
-            config[k] = v
+            current_settings.pop(k)
+            config_in_making[k] = v
         except KeyError:
-            print("[WARNING]: {k} is not a valid option. Ignoring.")
+            print(f"[WARNING]: {k} is not a valid option. Ignoring.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -45,26 +45,24 @@ if __name__ == "__main__":
     config_being_made = {}
 
     if not os.path.exists(config_path):
-        print("a")
         if not os.path.exists(config_dir):
             os.mkdir(config_dir)
 
         user_settings = {}
-        update_config_with_passed_in_options(user_settings, passed_in_options)
+        update_config_with_passed_in_options(user_settings, passed_in_options, DEFAULT_SETTINGS)
         user_settings= {name: prompt_user(setting) for name, setting in DEFAULT_SETTINGS.items()}
         config["settings"] = user_settings
 
     else:
-        print("b")
         config.read(config_path)
         settings = DEFAULT_SETTINGS
 
         user_settings = config["settings"]
         settings = {name: Setting(user_settings[name], setting.desc) for name, setting in settings.items()}
 
-        update_config_with_passed_in_options(user_settings, passed_in_options)
+        update_config_with_passed_in_options(user_settings, passed_in_options, settings)
 
-        user_settings = {name: prompt_user(setting) for name, setting in settings.items()}
+        user_settings.update({name: prompt_user(setting) for name, setting in settings.items()})
         config["settings"] = user_settings
 
 
