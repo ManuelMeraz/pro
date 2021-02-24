@@ -19,7 +19,7 @@ def update_config_with_passed_in_options(config_in_making, passed_in_key_pairs, 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--options",
+    parser.add_argument("--update",
 			    metavar="KEY=VALUE",
 			    nargs='+',
 			    help= "(do not put spaces before or after the = sign). If a value contains spaces, "
@@ -44,8 +44,8 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
 
     passed_in_options = {}
-    if args.options is not None:
-        passed_in_options = dict(map(lambda k_v:k_v.split("="), args.options))
+    if args.update is not None:
+        passed_in_options = dict(map(lambda k_v:k_v.split("="), args.update))
 
     config_being_made = {}
 
@@ -59,7 +59,8 @@ if __name__ == "__main__":
         if not args.no_prompt:
             user_settings= {name: prompt_user(setting) for name, setting in DEFAULT_SETTINGS.items()}
         else:
-            user_settings={name: setting.value for name, setting in DEFAULT_SETTINGS.items()}
+            for k, v in DEFAULT_SETTINGS.items():
+                user_settings[k] = v.value
 
     else:
         config.read(config_path)
