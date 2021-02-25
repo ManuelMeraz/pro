@@ -1,20 +1,5 @@
-# pro
-
-```
-pro: 0.0.2
-
-A command line development environment (CLDE) for bash and debian based systems.
-
-usage:
-  config: configure pro
-  set <project_name>: a directory name within the workspace
-  cd: cd to the project
-  [con|container] attach|run|start|stop
-
-options:
-  -h|--help: show this help
-
-```
+# pro (project)
+command line development environment (CLDE) for debian based systems in bash
 
 ```
 pro set 
@@ -23,6 +8,22 @@ Set new project
     * check directory, if not exists ask for git repo url
     * ask for docker repo and tag
     * build custom image with username
+```
+
+```
+pro config 
+
+usage: pro config [<options>] [<setting>=<value>...]
+
+This subcommand will configure the global configuration for pro. pro
+needs to be configured before using any other subcommands.
+
+arguments:
+  <setting>=<value>... These values will be updated without prompting.
+
+options:
+  -f|--force           Reconfigure pro after it has already been configured
+  -n|--no-prompt       Apply any direct updates. Do not prompt for any settings.
 ```
 
 ```
