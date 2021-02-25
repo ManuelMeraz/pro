@@ -62,13 +62,10 @@ __pro_subcommand_config() {
 
     ########################### config subcommand ###############################
     if [[ -d $HOME/.pro ]] && [[ "${force}" = false ]]; then
-        echo a
         __pro_log_info "pro is already configured."
     elif [[ -z ${POSITIONAL} ]]; then
-        echo b
         python3 "${root_lib_dir}"/pycommon/configure_defaults.py ${flags}
     else
-        echo c
         python3 "${root_lib_dir}"/pycommon/configure_defaults.py ${flags} --update "${POSITIONAL[@]}"
     fi
     ############################################################################
