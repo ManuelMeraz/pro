@@ -11,15 +11,19 @@ Set new project
 ```
 
 ```
-pro start 
+pro config 
 
-Start the project container. Restart if already running.
-```
+usage: pro config [<options>] [<setting>=<value>...]
 
-```
-pro stop
+This subcommand will configure the global configuration for pro. pro
+needs to be configured before using any other subcommands.
 
-Stop the project container.
+arguments:
+  <setting>=<value>... These values will be updated without prompting.
+
+options:
+  -f|--force           Reconfigure pro after it has already been configured
+  -n|--no-prompt       Apply any direct updates. Do not prompt for any settings.
 ```
 
 ```
@@ -29,7 +33,19 @@ cd to current project directory.
 ```
 
 ```
-pro attach 
+pro container start 
+
+Start the project container. Restart if already running.
+```
+
+```
+pro container stop
+
+Stop the project container.
+```
+
+```
+pro container attach 
 
 attach to current project docker container 
 ```

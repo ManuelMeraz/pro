@@ -1,6 +1,11 @@
 #! /bin/bash
 
 __pro_subcommand_cd() {
+    #if [[ $# -eq 0 ]]; then
+		#echo "Usage: pro config [-f|--force] [-h|--help]"
+		#return 1
+    #fi
+
 
     POSITIONAL=()
     while [[ $# -gt 0 ]]

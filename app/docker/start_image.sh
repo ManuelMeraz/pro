@@ -29,3 +29,5 @@ docker run --privileged -d \
     -d -it \
     --ipc=host --network=host \
     --name "${image_name}" "${image_name}"
+
+docker exec -u root ${image_name} sh -c "echo 127.0.0.1 ${image_name} >> /etc/hosts"
