@@ -17,20 +17,20 @@ __pro_subcommand_config() {
         shift # shift flag
 
         ##################################### help ########################################
-        echo "pro config:"
+        echo "usage: pro config [<options>] [<setting>=<value>...]"
         echo 
-        echo "This subcommand will configure the global configuration for pro. The project"
-        echo "needs to be configured at least before using any other subcommands. "
+        echo "This subcommand will configure the global configuration for pro. pro"
+        echo "needs to be configured before using any other subcommands."
         echo
-        echo "Pairs may be passed in with a '=' to skip the prompt for that setting."
-        echo
-        echo "usage:"
-        echo "  pro config"
-        echo "  pro config workspace=/home/bob/projects image=ubuntu:20.04"
+        echo "arguments:"
+        echo "  <setting>=<value>... These values will be updated without prompting."
         echo
         echo "options:"
-        echo "  -h|--help: show this help"
-        echo "  -f|--force: reconfigure pro after it has already been configured"
+        echo "  -f|--force           Reconfigure pro after it has already been configured"
+        echo "  -n|--no-prompt       Apply any direct updates. Do not prompt for any settings."
+        echo "  -h|--help            Show this help"
+        echo
+        python3 "${root_lib_dir}"/pycommon/default_settings.py --print-defaults
 
         return 0
         ##################################################################################
@@ -66,10 +66,10 @@ __pro_subcommand_config() {
         __pro_log_info "pro is already configured."
     elif [[ -z ${POSITIONAL} ]]; then
         echo b
-        "${root_lib_dir}"/pycommon/configure_defaults.py ${flags}
+        python3 "${root_lib_dir}"/pycommon/configure_defaults.py ${flags}
     else
         echo c
-        "${root_lib_dir}"/pycommon/configure_defaults.py ${flags} --update "${POSITIONAL[@]}"
+        python3 "${root_lib_dir}"/pycommon/configure_defaults.py ${flags} --update "${POSITIONAL[@]}"
     fi
     ############################################################################
 }
