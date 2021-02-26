@@ -2,7 +2,7 @@
 command line development environment (CLDE) for debian based systems in bash
 
 ```
-pro set 
+pro checkout 
 
 Set new project
     * check directory, if not exists ask for git repo url

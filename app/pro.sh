@@ -6,7 +6,7 @@ source "${root_lib_dir}/common/log.sh" || return 1
 source "${root_lib_dir}/common/clean_up.sh" || return 1
 source "${root_lib_dir}/common/error_exit.sh" || return 1
 
-source "${root_lib_dir}/subcommands/set.sh" || __pro_error_exit "failed source set subcommand" || return 1
+source "${root_lib_dir}/subcommands/checkout.sh" || __pro_error_exit "failed source checkout subcommand" || return 1
 source "${root_lib_dir}/subcommands/cd.sh" || __pro_error_exit "failed source cd subcommand" || return 1
 source "${root_lib_dir}/subcommands/config.sh" || __pro_error_exit "failed source bash subcommand" || return 1
 
@@ -30,7 +30,7 @@ __pro_usage() {
 	echo
 	echo "usage:"
 	echo "  config: configure pro"
-	echo "  set <project_name>: a directory name within the workspace"
+	echo "  checkout <project_name>: a directory name within the workspace"
 	echo "  cd: cd to the project"
 	echo "  [con|container] attach|run|start|stop"
     echo
@@ -38,19 +38,19 @@ __pro_usage() {
 	echo "  -h|--help: show this help"
 }
 
-__pro_set() {
+__pro_checkout() {
     if ! __pro_is_configured; then
         return 1
     fi
 
     shift
     if [[ -z "$1" ]]; then
-        echo "pro set:"
+        echo "pro checkout:"
         echo 
-        echo "This subcommand will set the current project to an existing directory matching <project_name> within the workspace."
+        echo "This subcommand will checkout the current project to an existing directory matching <project_name> within the workspace."
         echo
         echo "usage:"
-        echo "  pro set <existing_project>"
+        echo "  pro checkout <existing_project>"
         echo
         echo "options:"
         echo "  -h|--help: show this help"
@@ -64,7 +64,7 @@ __pro_set() {
         return 1
     fi
 
-    __pro_subcommand_set "$@"
+    __pro_subcommand_checkout "$@"
 }
 
 __pro_cd() {
@@ -90,8 +90,10 @@ __pro_container() {
 declare -A __PRO_SUBCOMMANDS=(
     [main]=__pro_usage
     [config]=__pro_config
-    [set]=__pro_set
     [cd]=__pro_cd
+
+    [co]=__pro_checkout
+    [checkout]=__pro_checkout
 
     [con]=__pro_container
     [container]=__pro_container

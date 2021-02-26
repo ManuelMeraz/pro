@@ -4,12 +4,13 @@ import os
 import argparse
 
 class Setting:
-    def __init__(self, value, desc):
+    def __init__(self, value, desc, is_path=False):
         self.value = value
         self.desc = desc
+        self.is_path = is_path
 
 DEFAULT_SETTINGS = {
-    "workspace" : Setting(os.environ["HOME"], desc="Workspace Path"),
+    "workspace" : Setting(os.environ["HOME"], desc="Workspace Path", is_path=True),
     "username" : Setting(os.environ["USER"], desc="Docker container username"),
     "image" : Setting("ubuntu:20.04", desc="Default docker image"),
 }
@@ -17,8 +18,10 @@ DEFAULT_SETTINGS = {
 def prompt_user(setting: Setting):
     user_value = input(f"[INFO][configure]: {setting.desc} [{setting.value}]?") or setting.value
 
-    if os.path.isfile(user_value) or os.path.isdir(user_value):
-        user_value = os.path.expanduser(user_value)
+    user_value = os.path.expanduser(user_value)
+    if setting.is_path and not (os.path.isfile(user_value) or os.path.isdir(user_value)):
+        print(f"[ERROR]: An invalid directory has been passsed in: {user_value}")
+        exit(1)
 
     return user_value
 

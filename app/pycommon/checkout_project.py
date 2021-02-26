@@ -1,5 +1,10 @@
 #! /usr/bin/env python3
 
+"""
+This script will prompt the user for new project information. It will then look at
+the ~/.pro/config file and set the current project section in that file.
+"""
+
 import logging
 from logging_utils import Logger
 
@@ -11,7 +16,7 @@ import subprocess
 
 def make_project_section(config, project_name):
     if not config.has_section(project_name):
-        default = config["default"]
+        default = config["settings"]
 
         project_section = {
             "path": os.path.join(default["workspace"], project_name),
@@ -34,10 +39,12 @@ def prompt_user_for_project_details(project):
 
 
 if __name__ == "__main__":
-    logger = Logger(level=logging.INFO, subcommand="set")
+    logger = Logger(level=logging.INFO, subcommand="checkout")
 
     if len(sys.argv) <= 1:
         exit(1)
+
+    # import pdb; pdb.set_trace()
 
     home = os.environ["HOME"]
 
@@ -51,6 +58,7 @@ if __name__ == "__main__":
 
     project_section = make_project_section(config, project_name)
     if not os.path.exists(project_section["path"]):
+        logging.error(f"Attempted to checkout project {project_name} but the path {project_section['path']} does not exist.")
         exit(1)
 
     project_section["name"] = project_name
