@@ -13,8 +13,6 @@ command line development environment (CLDE) for debian based systems in bash
 
 **container:** Various docker convenience container subcommands (attach|run|start|stop)
 
-**build:** Build the current project
-
 **ed:** Edit a file in the project
 
 ### Documentation
