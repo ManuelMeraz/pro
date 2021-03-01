@@ -1,59 +1,141 @@
 # pro (project)
 command line development environment (CLDE) for debian based systems in bash
 
-```
-pro checkout 
+## Subcommands
 
-Set new project
-    * check directory, if not exists ask for git repo url
-    * ask for docker repo and tag
-    * build custom image with username
-```
+**config:** Get or set project or global settings
+
+**checkout:** Switch projects or begin new project
+
+**status:** Show the status of pro and the active project
+
+**cd:** Change directories to the current project or related directories.
+
+**container:** Various docker convenience container subcommands (attach|run|start|stop)
+
+**build:** Build the current project
+
+**ed:** Edit a file in the project
+
+### Documentation
+
+#### Config
 
 ```
-pro config 
-
 usage: pro config [<options>] [<setting>=<value>...]
 
-This subcommand will configure the global configuration for pro. pro
-needs to be configured before using any other subcommands.
+Configure global settings or the active project settings
 
 arguments:
   <setting>=<value>... These values will be updated without prompting.
 
+  -n|--no-prompt        Apply arguments without prompting.
+
 options:
-  -f|--force           Reconfigure pro after it has already been configured
-  -n|--no-prompt       Apply any direct updates. Do not prompt for any settings.
+  -g|--global           Configure the global settings
+  -p|--project          Configure the active project settings
+
+defaults:
+  -d|--show-defaults    Show default settings
 ```
 
-```
-pro cd
+#### Default Settings
 
-cd to current project directory.
-```
 
-```
-pro container start 
+| Name      | Value        | Description                                                              |
+|-----------|--------------|--------------------------------------------------------------------------|
+| workspace | $HOME        | The path to the workspace is the directory where your projects will live |
+| image     | ubuntu:20.04 | The default docker image for development                                 |
 
-Start the project container. Restart if already running.
-```
 
-```
-pro container stop
-
-Stop the project container.
-```
+#### Checkout
 
 ```
-pro container attach 
+usage: pro co|checkout [<options>] <project>
 
-attach to current project docker container 
+Checkout a project and make it the the active project.
+
+arguments:
+  <project> The name of an existing directory in the configured workspace.
+
+options:
+  -n|--new-project     Checkout a new project
+  -s|--stop-container  Stop the active project container before switching projects
 ```
+
+#### Cd
+
+```
+usage: pro cd [<options>] [<directory>]
+
+cd to active project directory. 
+
+arguments:
+  <directory> A directory in the project to cd to in the project.
+
+options:
+  -w|--workspace     cd to the workspace instead
+  -f|--fuzz 		 Use fzf to search for a specific directory 
+```
+
+#### Container
+
+The purpose of this docker command is to use docker containers for
+developing.
+
+**attach:** Attach to the current container
+
+**exec:** Execute a command in the container and interact with it.
+
+**run:** Run the container and attach.
+
+**stop:** Stop the docker container
+
+
+#### Attach
+```
+pro container attach [<command>] [--] <docker>...
+
+Attach to active project docker container with an interactive bash shell
+
+arguments:
+	command A command that will be executed on login to the shell
+```
+
+#### Exec
+```
+pro container exec [<command>] [--] <docker>...
+
+Execute a command in the docker container and interact with it
+
+arguments:
+  -d|--detach    Execute the command without attaching to the container
+```
+
+#### Run
+
+```
+usage: pro container run [--] <docker>...
+
+Start the active project container. Restart if already running.
+```
+
+#### Stop
+```
+usage: pro container stop [<options>] [--] <docker>...
+
+Stop the active project container
+
+options:
+  -a|--all     		   Stop all project docker containers
+```
+
+
 
 ## Dependencies
 
 ```
-sudo apt install -y docker.io silversearcher-ag fzf 
+sudo apt install -y docker.io silversearcher-ag fzf
 sudo usermod -aG docker $USER # log in and out after this or reboot
 ```
 

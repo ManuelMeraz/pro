@@ -5,13 +5,9 @@ This script will prompt the user for new project information. It will then look 
 the ~/.pro/config file and set the current project section in that file.
 """
 
-import logging
-from logging_utils import Logger
-
 import os
-import configparser
-import sys
-import subprocess
+
+from pro import checkout, ProConfig
 
 
 def make_project_section(config, project_name):
