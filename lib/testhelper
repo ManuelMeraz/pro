@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -o errexit
+
+config="$HOME/.pro"
+backup="$config.backup"
+
+th_exists() {
+  [ -e "$1" ] && return 0
+  return 1
+}
+
+th_restore()
+{
+  th_exists "$config" && echo "deleting config" && rm -rf "$config"
+  th_exists "$backup" && echo "restoring backup" && mv "$backup" "$config"
+}
+
+th_backup() {
+  th_exists "$config" && mv "$config" "$backup"
+}

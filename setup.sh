@@ -11,4 +11,4 @@ fi
 
 this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 version="$(cat "${this_dir}/VERSION")"
-source "${this_dir}/app/pro.sh"
+source "${this_dir}/src/pro.sh"
